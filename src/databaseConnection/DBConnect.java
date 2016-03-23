@@ -6,8 +6,8 @@ import java.sql.*;
 public class DBConnect {
 	
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost/3306/";
-	static final String Database = "MPT";
+	static final String DB_URL = "jdbc:mysql://localhost/"; // 3306 port not needed
+	static final String Database = "mpt";
 	
 	static final String uName = "mediahog";
 	static final String uPass = "p@ssw0rd";
@@ -54,11 +54,11 @@ public class DBConnect {
 			String uPass = rs.getString("password");
 			
 			//Display Values
-			System.out.println("uID: " + uID);
-			System.out.println(", fName: " + fName);
-			System.out.println(", lName: " + lName);
-			System.out.println(", email: " + email);
-			System.out.println(", uName: " + uName);
+			System.out.print("uID: " + uID);
+			System.out.print(", fName: " + fName);
+			System.out.print(", lName: " + lName);
+			System.out.print(", email: " + email);
+			System.out.print(", uName: " + uName);
 			System.out.println(", uPass: " + uPass);
 		
 			//Move cursor to first row
@@ -78,11 +78,11 @@ public class DBConnect {
 			uPass = rs.getString("password");
 			
 			//Display Values
-			System.out.println("uID: " + uID);
-			System.out.println(", fName: " + fName);
-			System.out.println(", lName: " + lName);
-			System.out.println(", email: " + email);
-			System.out.println(", uName: " + uName);
+			System.out.print("uID: " + uID);
+			System.out.print(", fName: " + fName);
+			System.out.print(", lName: " + lName);
+			System.out.print(", email: " + email);
+			System.out.print(", uName: " + uName);
 			System.out.println(", uPass: " + uPass);
 		
 			System.out.println("Moving cursor to next row...");
@@ -101,14 +101,41 @@ public class DBConnect {
 			uPass = rs.getString("password");
 			
 			//Display Values
-			System.out.println("uID: " + uID);
-			System.out.println(", fName: " + fName);
-			System.out.println(", lName: " + lName);
-			System.out.println(", email: " + email);
-			System.out.println(", uName: " + uName);
+			System.out.print("uID: " + uID);
+			System.out.print(", fName: " + fName);
+			System.out.print(", lName: " + lName);
+			System.out.print(", email: " + email);
+			System.out.print(", uName: " + uName);
 			System.out.println(", uPass: " + uPass);
 			
+			//moving cursor off list?
+			System.out.println("Moving cursor off list?...");
+			rs.next();
+			
+			//Extract Data
+			System.out.println("displaying record?...");
+			
+			//Retrieve by column name
+			
+			uID = rs.getInt("uID");
+			fName = rs.getString("fName");
+			lName = rs.getString("lName");
+			email = rs.getString("email");
+			uName = rs.getString("username");
+			uPass = rs.getString("password");
+			
+			//Display Values
+			System.out.print("uID: " + uID);
+			System.out.print(", fName: " + fName);
+			System.out.print(", lName: " + lName);
+			System.out.print(", email: " + email);
+			System.out.print(", uName: " + uName);
+			System.out.println(", uPass: " + uPass);
+			
+			
+			
 			//Clean Up !
+			System.out.println("closing up shop");
 			rs.close();
 			stmt.close();
 			conn.close();
@@ -137,3 +164,4 @@ public class DBConnect {
 		System.out.println("Goodbye...");
 	}//end main
 }//end class
+
