@@ -28,112 +28,32 @@ public class DBConnect {
 			conn = DriverManager.getConnection(DB_URL+Database,uName,uPass);
 			
 			//Execute a query 
-			System.out.println("Creating prepared statement...");
+			System.out.println("Creating statement...");
 			
-			//pstmt = conn.prepareStatement(SQL, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			stmt = conn.createStatement( ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			SQL = "SELECT * FROM userinfotable";
+			//stmt = conn.createStatement(); 
+			//pstmt = conn.prepareStatement(SQL, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
+			SQL = "SELECT * FROM userinfotable";
+						
 			ResultSet rs = stmt.executeQuery(SQL);
 			
-			//Move cursor to the last row
-			System.out.println("Moving cursor to the last...");
-			rs.last();
-			
-			
-			//Extract Data
-			System.out.println("displaying record...");
-			
-			//Retrieve by column name
-			
-			int uID = rs.getInt("uID");
-			String fName = rs.getString("fName");
-			String lName = rs.getString("lName");
-			String email = rs.getString("email");
-			String uName = rs.getString("username");
-			String uPass = rs.getString("password");
-			
-			//Display Values
-			System.out.print("uID: " + uID);
-			System.out.print(", fName: " + fName);
-			System.out.print(", lName: " + lName);
-			System.out.print(", email: " + email);
-			System.out.print(", uName: " + uName);
-			System.out.println(", uPass: " + uPass);
-		
-			//Move cursor to first row
-			System.out.println("Moving cursor to first row...");
-			rs.first();
-			
-			//Extract Data
-			System.out.println("displaying record...");
-			
-			//Retrieve by column name
-			
-			uID = rs.getInt("uID");
-			fName = rs.getString("fName");
-			lName = rs.getString("lName");
-			email = rs.getString("email");
-			uName = rs.getString("username");
-			uPass = rs.getString("password");
-			
-			//Display Values
-			System.out.print("uID: " + uID);
-			System.out.print(", fName: " + fName);
-			System.out.print(", lName: " + lName);
-			System.out.print(", email: " + email);
-			System.out.print(", uName: " + uName);
-			System.out.println(", uPass: " + uPass);
-		
-			System.out.println("Moving cursor to next row...");
-			rs.next();
-			
-			//Extract Data
-			System.out.println("displaying record...");
-			
-			//Retrieve by column name
-			
-			uID = rs.getInt("uID");
-			fName = rs.getString("fName");
-			lName = rs.getString("lName");
-			email = rs.getString("email");
-			uName = rs.getString("username");
-			uPass = rs.getString("password");
-			
-			//Display Values
-			System.out.print("uID: " + uID);
-			System.out.print(", fName: " + fName);
-			System.out.print(", lName: " + lName);
-			System.out.print(", email: " + email);
-			System.out.print(", uName: " + uName);
-			System.out.println(", uPass: " + uPass);
-			
-			//moving cursor off list?
-			System.out.println("Moving cursor off list?...");
-			rs.next();
-			
-			//Extract Data
-			System.out.println("displaying record?...");
-			
-			//Retrieve by column name
-			
-			uID = rs.getInt("uID");
-			fName = rs.getString("fName");
-			lName = rs.getString("lName");
-			email = rs.getString("email");
-			uName = rs.getString("username");
-			uPass = rs.getString("password");
-			
-			//Display Values
-			System.out.print("uID: " + uID);
-			System.out.print(", fName: " + fName);
-			System.out.print(", lName: " + lName);
-			System.out.print(", email: " + email);
-			System.out.print(", uName: " + uName);
-			System.out.println(", uPass: " + uPass);
-			
-			
-			
+			while(rs.next()){
+				int uID = rs.getInt("uID");
+				String fName = rs.getString("fName");
+				String lName = rs.getString("lName");
+				String email = rs.getString("email");
+				String uName = rs.getString("username");
+				String uPass = rs.getString("password");
+				
+				System.out.print("uID: " + uID);
+				System.out.print(", fName: " + fName);
+				System.out.print(", lName: " + lName);
+				System.out.print(", email: " + email);
+				System.out.print(", uName: " + uName);
+				System.out.println(", uPass: " + uPass);
+			}
+					
 			//Clean Up !
 			System.out.println("closing up shop");
 			rs.close();
