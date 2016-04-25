@@ -20,16 +20,10 @@
 		
 <h3> Displaying movies in database</h3>
 
-<div class="main vlcone">
-<div class="pay_form">
 			<form:form action="Search" method="post" modelAttribute="userForm">
 				<form:input path="searchTitle" />
 				<input type="submit" value="Search">
 			</form:form>
-			
-</div>
-</div>
-
 
 	<h4> List of Movies </h4>
 				
@@ -43,11 +37,10 @@
  </tr>
  
  
- 
 <c:forEach items="${movieListWrapper.allmovies}"    var="movie"   varStatus="status" >  
 <tr style="background-color:white;color: black;text-align: center;" height="30px" >  
 <td><form:input  path="allmovies[${status.index}].movieTitle"   value="${movie.movieTitle}" /></td>  
-<td><form:input  type="number"  path="allmovies[${status.index}].ratings"  min="1"  max="5"  value="${movie.ratings}" /></td>  
+<td><form:input  type="number"  path="allmovies[${status.index}].ratings"  min="0"  max="5"  value="${movie.ratings}" /></td>  
 <td><form:input  path="allmovies[${status.index}].ignore"    value="${movie.ignore}"/></td>  
 <td><form:input  path="allmovies[${status.index}].wish"      value="${movie.wish}"/><br></td>
 </tr>  

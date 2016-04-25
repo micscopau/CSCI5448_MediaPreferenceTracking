@@ -312,27 +312,33 @@ public class HomeController
 	    
 
 		@RequestMapping(value = "/Search", method = {RequestMethod.GET, RequestMethod.POST})
-		 public String Search(@ModelAttribute("userForm") SearchDAO search, BindingResult result, ModelMap model) 
+		 public String Search(@ModelAttribute("userForm") SearchDAO search, ModelMap model) 
 		 {
-			
-			 model.addAttribute("searchTitle", searchTitle);
-					
+			// model.addAttribute("searchTitle", searchTitle);
+			 searchdao = search;	
 			 page=displaySearch(model,uID);
-			 searchdao = search;
-
+			 		 
 		     return page;
 		 }
 		
 	    public String displaySearch(ModelMap model, long uID)
-	    {    
+	    {     
+	    	 MovieListWrapper wrapper=new MovieListWrapper();
 	    	 ContextLists context = new ContextLists(new SearchList());
 	    	 
-			 movies=context.executeFetchMovieStrategy(uID, searchdao);
+	    	 System.out.println("searchdao.getSearchTitle(): " + searchdao.getSearchTitle());
+	    	 
+	    	 if (searchdao.getSearchTitle() == null)
+	    		 movies=context.executeFetchMovieStrategy(uID);
+	    	 else
+	    		 movies=context.executeFetchMovieStrategy(uID, searchdao);
+			 
+	    	 wrapper.setAllmovies(movies);
 			 usernew=userdao.getUser(uID);
 			 
 			 model.addAttribute("fName",usernew.getfName());
-			 model.addAttribute("movies", movies);
-			// model.addAttribute("searchTitle",searchTitle);
+			 model.addAttribute("movieListWrapper",wrapper);
+			 model.addAttribute("searchTitle",searchTitle);
 	
 			 /*for (Moviedisplayformat mov: movies)
 			 {

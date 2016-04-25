@@ -28,7 +28,7 @@
 <c:forEach items="${movies}" var="movie">  
 <tr style="background-color:white;color: black;text-align: center;" height="30px" >  
 <td><c:out value="${movie.movieTitle}"/></td>  
-<td><input type="number" name="list" min="1" max="5" value="${movie.ratings}"></td>  
+<td><input type="number" name="list" min="0" max="5" value="${movie.ratings}"></td>  
 <td><input type="radio" name="list" value="${movie.ignore}"></td>  
 <td><input type="radio" name="list" value="${movie.wish}"><br></td>
 </tr>  

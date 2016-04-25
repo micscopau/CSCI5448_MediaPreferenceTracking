@@ -43,17 +43,11 @@ public class SearchDAO implements StrategyDAO
 		int start, maxRows;
 		
 		start = 0;
-		maxRows = 10;
+		maxRows = 20;
 		
 		//Query query = session.createQuery("from Movie M"); //ORI
 		
-		Query query = session.createQuery("from Movie M where M.movieTitle like :searchTitle ");
-		//query.setString("searchTitle", "%" + searchTitle + "%");
-		query.setParameter("searchTitle", "%" + searchTitle + "%");
-		
-		 System.out.println("this.getSearchTitle: " + this.getSearchTitle());
-		 System.out.println("searchTitle: " + searchTitle);
-		
+		Query query = session.createQuery("from Movie M");		
 		
 		query.setFirstResult(start);
 		query.setMaxResults(maxRows);	
@@ -66,6 +60,7 @@ public class SearchDAO implements StrategyDAO
 		for(Movie movie: allmovies)
 		{
 			AList singleAList = new AList();
+			
 			singleAList.setmID(movie.getmID());
 			singleAList.setuID(uID);
 			singleAList.setRatings(0);
@@ -90,7 +85,7 @@ public class SearchDAO implements StrategyDAO
 		int start, maxRows;
 		
 		start = 0;
-		maxRows = 10;
+		maxRows = 20;
 		
 		//Query query = session.createQuery("from Movie M"); //ORI
 		
@@ -109,7 +104,7 @@ public class SearchDAO implements StrategyDAO
 	
 		for(Movie movie: allmovies)
 		{
-			System.out.println("mID: " + movie.getmID());
+			//System.out.println("mID: " + movie.getmID());
 			
 			AList singleAList = new AList();
 			singleAList.setmID(movie.getmID());
@@ -121,13 +116,8 @@ public class SearchDAO implements StrategyDAO
 			aList.add(singleAList);
 		
 		}
+		
 		session.getTransaction().commit();	
-		
-		for(AList mov: aList)
-		{
-			System.out.println(mov.getmID());
-		}
-		
 		
 		return aList;
 	}

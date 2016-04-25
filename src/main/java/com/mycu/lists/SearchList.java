@@ -49,7 +49,7 @@ public class SearchList implements StrategyLists
 			formatmovies.add(formatmovie);
 			
 		}
-		
+	
 		return formatmovies;
 	}
 	
@@ -60,6 +60,7 @@ public class SearchList implements StrategyLists
 		
 		ContextDAO context = new ContextDAO(new SearchDAO());
 		System.out.println("UID in search page is "+uID);
+		
 		movies=context.executeFetchMovieStrategy(uID, searchDAO);
 		
 		for(AList mov: movies)
@@ -73,9 +74,9 @@ public class SearchList implements StrategyLists
 			Moviedisplayformat formatmovie = new Moviedisplayformat(movieTitle,wish,ignore,ratings);
 			formatmovies.add(formatmovie);
 			
-			//System.out.println("mID : " + mID);
 		}
 		
+
 		return formatmovies;
 	}
 
