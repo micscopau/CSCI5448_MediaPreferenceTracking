@@ -1,5 +1,6 @@
 package com.mycu.controller;
 
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.mycu.dao.UserDAO;
+import com.mycu.dbhandler.HibernateUtil;
 import com.mycu.dao.SearchDAO;
 import com.mycu.lists.ContextLists;
 import com.mycu.lists.IgnoreList;
@@ -39,9 +41,6 @@ public class HomeController
 	User usernew= new User(); 
 	SearchDAO searchdao = new SearchDAO();
 	ArrayList<Moviedisplayformat> movies= new ArrayList<Moviedisplayformat>();
-	
-	
-	
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	 public String Splashpage(@ModelAttribute("userForm") User user,ModelMap model) 
@@ -103,6 +102,9 @@ public class HomeController
 	@RequestMapping(value = "/logout")
     public String userLogout(@ModelAttribute("userForm") User user,ModelMap model)
     {
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		sessionFactory.close();
+		
 		page=displaySplash();
         return page;
     }
@@ -214,8 +216,7 @@ public class HomeController
 		    		
 		    	}
 		    	
-		    	
-	    		
+		   
 		    	System.out.println("Title is "+ mdf.getMovieTitle());
 		    	System.out.println("Ignore value is "+ mdf.isIgnore());
 		    	System.out.println("Wish value is "+ mdf.isWish());
@@ -316,6 +317,42 @@ public class HomeController
 		 {
 			// model.addAttribute("searchTitle", searchTitle);
 			 searchdao = search;	
+			 page=displaySearch(model,uID);
+			 		 
+		     return page;
+		 }
+		
+	
+		@RequestMapping(value = "/previousSearch", method = RequestMethod.GET)
+		 public String previousSearch(@ModelAttribute("userForm") SearchDAO search, ModelMap model) 
+		 {
+			int startRow = searchdao.getStartRow();
+			
+			if (startRow==0)
+				 return page;
+			else if(startRow <= 20)
+					searchdao.setStartRow(0);				
+			else
+				searchdao.setStartRow(startRow -20);
+					 	 
+			 page=displaySearch(model,uID);
+			 		 
+		     return page;
+		 }
+		
+		@RequestMapping(value = "/nextSearch", method = RequestMethod.GET)
+		 public String nextSearch(@ModelAttribute("userForm") SearchDAO search, ModelMap model) 
+		 {
+			int startRow = searchdao.getStartRow();
+			long endRow = searchdao.getMaxResults();
+			
+			if (startRow < (endRow-20)) //still before end of results
+				searchdao.setStartRow(startRow+20);
+			else if(startRow == (endRow - 20)) //exactly at last 20 of results
+				return page;//already at end of results from last query, don't need to redo displaySearch call				
+			else //near end but still some results might not be visible
+				searchdao.setStartRow((int)endRow-20);	
+					 	 
 			 page=displaySearch(model,uID);
 			 		 
 		     return page;

@@ -31,6 +31,7 @@ public class MovieDAO
  		movieTitle=movie.getMovieTitle();
  		
 		session.getTransaction().commit();
+		session.close();
 		
 		return movieTitle;
 	}
@@ -52,6 +53,7 @@ public class MovieDAO
 		}
 		
 		session.getTransaction().commit();
+		session.close();
 		
 		return mID;
 	}

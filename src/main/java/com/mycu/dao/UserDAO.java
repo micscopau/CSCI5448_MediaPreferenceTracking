@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 
 import com.mycu.dbhandler.HibernateUtil;
 import com.mycu.model.User;
+
 public class UserDAO 
 {
 	private String Username,password;

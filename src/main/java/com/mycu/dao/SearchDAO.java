@@ -18,6 +18,25 @@ public class SearchDAO implements StrategyDAO
 {
 	
 	public String searchTitle;
+	public int startRow;
+	long maxResults;
+	
+
+	public long getMaxResults() {
+		return maxResults;
+	}
+
+	public void setMaxResults(long maxResults) {
+		this.maxResults = maxResults;
+	}
+
+	public int getStartRow() {
+		return startRow;
+	}
+
+	public void setStartRow(int startRow) {
+		this.startRow = startRow;
+	}
 
 	public String getSearchTitle() {
 		return searchTitle;
@@ -71,6 +90,7 @@ public class SearchDAO implements StrategyDAO
 		
 		}
 		session.getTransaction().commit();	
+		session.close();
 		
 		return aList;
 	}
@@ -82,12 +102,28 @@ public class SearchDAO implements StrategyDAO
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		
-		int start, maxRows;
+		int start, totalRows; 
+		long maxSize;
 		
-		start = 0;
-		maxRows = 20;
+		start = searchDAO.getStartRow();
+		totalRows = 20;
 		
 		//Query query = session.createQuery("from Movie M"); //ORI
+		
+		maxSize = searchDAO.getMaxResults();
+		
+		if (maxSize == 0)
+		{
+			Query qSize = session.createQuery("select count(*) from Movie M where M.movieTitle like :searchTitle");
+			qSize.setString("searchTitle", "%" +  searchDAO.getSearchTitle() + "%");
+			maxSize = (Long) qSize.uniqueResult();
+			System.out.println("Max Size: " + maxSize);
+			searchDAO.setMaxResults(maxSize-1);
+			
+			//if (maxSize == 0) //still empty set, return aList immediately along with message of empty set
+			
+		}
+		
 		
 		Query query = session.createQuery("from Movie M where M.movieTitle like :searchTitle ");
 		query.setString("searchTitle", "%" +  searchDAO.getSearchTitle() + "%");
@@ -95,11 +131,13 @@ public class SearchDAO implements StrategyDAO
 		System.out.println("Searching for movies with title like: " + searchDAO.getSearchTitle());
 		
 		query.setFirstResult(start);
-		query.setMaxResults(maxRows);	
+		query.setMaxResults(totalRows);	
 		
+		System.out.println("Current Search Row: " + start + " out of a total: " + maxSize);
+
 		@SuppressWarnings("unchecked")		
 		List<Movie> allmovies = query.list();
-		
+				
 		ArrayList<AList> aList = new ArrayList<AList>();
 	
 		for(Movie movie: allmovies)
@@ -118,6 +156,7 @@ public class SearchDAO implements StrategyDAO
 		}
 		
 		session.getTransaction().commit();	
+		session.close();
 		
 		return aList;
 	}

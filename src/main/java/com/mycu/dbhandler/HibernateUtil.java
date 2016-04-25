@@ -5,18 +5,14 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-
-
-
-
 public class HibernateUtil 
 {
-
 
 	public HibernateUtil()
 	{
 		
 	}
+	
 // A SessionFactory is set up once for an application!
    final static StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
             .configure() // configures settings from hibernate.cfg.xml
@@ -48,6 +44,10 @@ public class HibernateUtil
 	    }
 	    return sessionFactory;
 	}
-
+	
+	//Call this during shutdown
+	public static void close(){
+		sessionFactory.close();
+	}
 
 }

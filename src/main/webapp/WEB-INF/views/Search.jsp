@@ -18,15 +18,27 @@
 
 
 		
-<h3> Displaying movies in database</h3>
+<h3> Search movies in database</h3>
 
 			<form:form action="Search" method="post" modelAttribute="userForm">
 				<form:input path="searchTitle" />
 				<input type="submit" value="Search">
 			</form:form>
 
-	<h4> List of Movies </h4>
+	<h4> List of Movie Results </h4>
 				
+				
+
+   <form:form action="previousSearch" method="GET" align="center">
+   	<input type="submit" name="previous" value="Previous" />
+   	</form:form>
+   	
+   	<form:form action="nextSearch" method="GET" align="center">
+ 		<input type="submit" name="next" value="Next" />
+ 	</form:form>
+ 	
+ <p></p>
+			
 <form:form action="dbupdate" method="POST" modelAttribute="movieListWrapper">
 <table border="1" width="100%">
  <tr>
@@ -35,18 +47,28 @@
     <th>Ignore</th>
     <th>Wish</th>
  </tr>
- 
- 
 <c:forEach items="${movieListWrapper.allmovies}"    var="movie"   varStatus="status" >  
 <tr style="background-color:white;color: black;text-align: center;" height="30px" >  
-<td><form:input  path="allmovies[${status.index}].movieTitle"   value="${movie.movieTitle}" /></td>  
-<td><form:input  type="number"  path="allmovies[${status.index}].ratings"  min="0"  max="5"  value="${movie.ratings}" /></td>  
-<td><form:input  path="allmovies[${status.index}].ignore"    value="${movie.ignore}"/></td>  
-<td><form:input  path="allmovies[${status.index}].wish"      value="${movie.wish}"/><br></td>
+<td align="left"> ${movie.movieTitle}"</td>  
+<td><form:input  type="number"  path="allmovies[${status.index}].ratings"  min="0"  max="5"  value="${movie.ratings}" style="width: 35px;"/></td>  
+<td><form:input  path="allmovies[${status.index}].ignore"    value="${movie.ignore}" style="width: 50px;"/></td>  
+<td><form:input  path="allmovies[${status.index}].wish"      value="${movie.wish}" style="width: 50px;"/><br></td>
 </tr>  
-</c:forEach>  
+</c:forEach>
+
 </table>
 <input type="submit" name="action" value="Save" />
 </form:form>
+
+<p></p>
+
+   <form:form action="previousSearch" method="GET" align="center">
+   	<input type="submit" name="previous" value="Previous" />
+   	</form:form>
+   	
+   	<form:form action="nextSearch" method="GET" align="center">
+ 		<input type="submit" name="next" value="Next" />
+ 	</form:form>
+
 </body>
 </html>

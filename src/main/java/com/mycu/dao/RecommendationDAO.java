@@ -42,8 +42,6 @@ public class RecommendationDAO implements StrategyDAO
 		
 		for(AList movie: allmovies)
 		{
-			System.out.println("mID: " + movie.getmID());
-			//System.err.println("adding movies");
 			movies.add(movie);
 		}
 		
@@ -74,8 +72,6 @@ public class RecommendationDAO implements StrategyDAO
 		
 		for(AList movie: allmovies)
 		{
-			System.out.println("mID: " + movie.getmID());
-			//System.err.println("adding movies");
 			movies.add(movie);
 		}
 		
