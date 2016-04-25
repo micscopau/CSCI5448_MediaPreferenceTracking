@@ -44,6 +44,29 @@ public class RatingsDAO implements StrategyDAO
 	}
 	
 	
+	public ArrayList<AList> fetchMovies(long uID, SearchDAO searchDAO)
+	{
+		ArrayList<AList> movies = new ArrayList<AList>();
+		
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		Query query = session.createQuery("from Ratings R where R.uID = :uID");
+		query.setParameter("uID",uID);
+	    
+		@SuppressWarnings("unchecked")
+		List<AList> allmovies = query.list();
+		for(AList movie: allmovies)
+		{
+			movies.add(movie);
+		}
+		
+		session.getTransaction().commit();	
+		
+		return movies;
+	}
+	
 	@Override
 	public void addMovie(AList movie)
 	{

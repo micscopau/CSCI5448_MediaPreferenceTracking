@@ -2,10 +2,11 @@ package com.mycu.lists;
 
 import java.util.ArrayList;
 
-
+import com.mycu.dao.ContextDAO;
 import com.mycu.dao.MovieDAO;
-
+import com.mycu.dao.RatingsDAO;
 import com.mycu.dao.SearchDAO;
+import com.mycu.dao.StrategyDAO;
 
 import com.mycu.model.Moviedisplayformat;
 import com.mycu.model.AList;
@@ -28,17 +29,18 @@ public class SearchList implements StrategyLists
 	
 	public ArrayList<Moviedisplayformat> fetchMovies(long uID)
 	{
-		ArrayList<Movie> movies= new ArrayList<Movie>();
+		ArrayList<AList> movies= new ArrayList<AList>();
 		ArrayList<Moviedisplayformat> formatmovies= new ArrayList<Moviedisplayformat>();
+		
+		ContextDAO context = new ContextDAO(new SearchDAO());
+		movies=context.executeFetchMovieStrategy(uID);
 		
 		System.out.println("UID in search page is "+uID);
 		
-		movies=searchdao.fetchMovies(uID);
-		
-		for(Movie mov: movies)
+		for(AList mov: movies)
 		{
-			
-			movieTitle=mov.getMovieTitle();
+			mID=mov.getmID();
+			movieTitle=moviedao.getMovie(mID);
 			ratings=0;
 			wish= false;
 			ignore=false;
@@ -50,10 +52,36 @@ public class SearchList implements StrategyLists
 		
 		return formatmovies;
 	}
-
+	
+	public ArrayList<Moviedisplayformat> fetchMovies(long uID, SearchDAO searchDAO)
+	{
+		ArrayList<AList> movies= new ArrayList<AList>();
+		ArrayList<Moviedisplayformat> formatmovies= new ArrayList<Moviedisplayformat>();
+		
+		ContextDAO context = new ContextDAO(new SearchDAO());
+		System.out.println("UID in search page is "+uID);
+		movies=context.executeFetchMovieStrategy(uID, searchDAO);
+		
+		for(AList mov: movies)
+		{
+			mID=mov.getmID();
+			movieTitle=moviedao.getMovie(mID);
+			ratings=0;
+			wish= false;
+			ignore=false;
+			
+			Moviedisplayformat formatmovie = new Moviedisplayformat(movieTitle,wish,ignore,ratings);
+			formatmovies.add(formatmovie);
+			
+			//System.out.println("mID : " + mID);
+		}
+		
+		return formatmovies;
+	}
 
 	public void addMovie(AList movie)
 	{
-		
+		ContextDAO context = new ContextDAO(new SearchDAO());
+		context.executeAddMovieStrategy(movie);
 	}
 }

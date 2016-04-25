@@ -10,13 +10,29 @@
 </head>
 <body>
 <h3>Hi ${fName}</h3>
-<a href="login"> Recommendation</a>
-<a href="Search"> Search</a>
-<a href="MyLists-Ratings"> MyLists</a>
-<a href="logout">Log out</a>
-<a href="editprofile">Edit Profile</a>
+	<a href="login"> Recommendation</a>
+	<a href="Search"> Search</a>
+	<a href="MyLists-Ratings"> MyLists</a>
+	<a href="logout">Log out</a>
+	<a href="editprofile">Edit Profile</a>
+
+
+		
 <h3> Displaying movies in database</h3>
-<h4> List of Movies </h4>
+
+<div class="main vlcone">
+<div class="pay_form">
+			<form:form action="Search" method="post" modelAttribute="userForm">
+				<form:input path="searchTitle" />
+				<input type="submit" value="Search">
+			</form:form>
+			
+</div>
+</div>
+
+
+	<h4> List of Movies </h4>
+				
 <form:form action="dbupdate" method="POST" modelAttribute="movieListWrapper">
 <table border="1" width="100%">
  <tr>
@@ -25,6 +41,9 @@
     <th>Ignore</th>
     <th>Wish</th>
  </tr>
+ 
+ 
+ 
 <c:forEach items="${movieListWrapper.allmovies}"    var="movie"   varStatus="status" >  
 <tr style="background-color:white;color: black;text-align: center;" height="30px" >  
 <td><form:input  path="allmovies[${status.index}].movieTitle"   value="${movie.movieTitle}" /></td>  

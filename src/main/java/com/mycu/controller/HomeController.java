@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.mycu.dao.UserDAO;
+import com.mycu.dao.SearchDAO;
 import com.mycu.lists.ContextLists;
 import com.mycu.lists.IgnoreList;
 import com.mycu.lists.MovieListWrapper;
@@ -32,9 +33,11 @@ public class HomeController
 	private String email,fName,lName;
 	public  long uID,mID;
 	public String page;
+	public String searchTitle;
 	
 	UserDAO userdao= new UserDAO();
 	User usernew= new User(); 
+	SearchDAO searchdao = new SearchDAO();
 	ArrayList<Moviedisplayformat> movies= new ArrayList<Moviedisplayformat>();
 	
 	
@@ -53,7 +56,18 @@ public class HomeController
     {
     	 return new ModelAndView("createaccount", "user", new User(fName,lName,Username,email,Password));
     }
-    
+	
+	
+	
+	/*
+	 @RequestMapping(value = "/Search" )
+	 public String Search(ModelMap model) 
+	 {
+			
+		 page=displaySearch(model,uID);
+	     return page;
+	 }
+	 */
 	
 	
 	
@@ -115,18 +129,11 @@ public class HomeController
     	 return new ModelAndView("viewprofile", "user", new User(fName,lName,Username,email,Password));
     }
     
-   
 	
 
+	
+	
 
-	 @RequestMapping(value = "/Search")
-	 public String Search(ModelMap model) 
-	 {
-			
-		 page=displaySearch(model,uID);
-	     return page;
-	 }
-	 
 	 
 	 
 	 @RequestMapping(value = "/MyLists-Ratings")
@@ -303,21 +310,38 @@ public class HomeController
 	    	 return "Wishlist"; //wish list page
 	    }
 	    
-	    
-	    public String displaySearch(ModelMap model, long uID)
-	    {    	 
-	    	 MovieListWrapper wrapper=new MovieListWrapper();
-	    	 ContextLists context = new ContextLists(new SearchList());
-			 
-	    	 movies=context.executeFetchMovieStrategy(uID);
-			 wrapper.setAllmovies(movies);
-			 usernew=userdao.getUser(uID);
+
+		@RequestMapping(value = "/Search", method = {RequestMethod.GET, RequestMethod.POST})
+		 public String Search(@ModelAttribute("userForm") SearchDAO search, BindingResult result, ModelMap model) 
+		 {
 			
+			 model.addAttribute("searchTitle", searchTitle);
+					
+			 page=displaySearch(model,uID);
+			 searchdao = search;
+
+		     return page;
+		 }
+		
+	    public String displaySearch(ModelMap model, long uID)
+	    {    
+	    	 ContextLists context = new ContextLists(new SearchList());
+	    	 
+			 movies=context.executeFetchMovieStrategy(uID, searchdao);
+			 usernew=userdao.getUser(uID);
 			 
 			 model.addAttribute("fName",usernew.getfName());
-			 model.addAttribute("movieListWrapper",wrapper);
+			 model.addAttribute("movies", movies);
+			// model.addAttribute("searchTitle",searchTitle);
+	
+			 /*for (Moviedisplayformat mov: movies)
+			 {
+				 System.out.println("movie title: " + mov.getMovieTitle());
+				 
+			 }*/
 			 
 	    	 return "Search"; //Search page
+	    	 	 
 	    }
 	    
 	    

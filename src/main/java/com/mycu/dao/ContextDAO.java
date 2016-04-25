@@ -18,6 +18,13 @@ public class ContextDAO
 	      return strategy.fetchMovies(uID);
 	}
 	
+	
+	public ArrayList<AList> executeFetchMovieStrategy(long uID, SearchDAO searchDAO)
+	{
+	      return strategy.fetchMovies(uID, searchDAO);
+	}
+	
+	
 	public void executeAddMovieStrategy(AList movie)
 	{
 		strategy.addMovie(movie);

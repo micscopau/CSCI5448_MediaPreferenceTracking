@@ -42,7 +42,40 @@ public class RecommendationDAO implements StrategyDAO
 		
 		for(AList movie: allmovies)
 		{
-			System.err.println("adding movies");
+			System.out.println("mID: " + movie.getmID());
+			//System.err.println("adding movies");
+			movies.add(movie);
+		}
+		
+		session.getTransaction().commit();	
+		
+		return movies;
+	}
+	
+	public ArrayList<AList> fetchMovies(long uID, SearchDAO searchDAO)
+	{
+		ArrayList<AList> movies = new ArrayList<AList>();
+		
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		System.err.println("pre query build");
+		
+		Query query = session.createQuery("from Recommendation R where R.uID = :uID");
+		query.setParameter("uID",uID);
+		
+		System.err.println("post query build");
+	    
+		@SuppressWarnings("unchecked")
+		List<AList> allmovies = query.list();
+		
+		System.err.println("post query");
+		
+		for(AList movie: allmovies)
+		{
+			System.out.println("mID: " + movie.getmID());
+			//System.err.println("adding movies");
 			movies.add(movie);
 		}
 		
