@@ -1,5 +1,6 @@
 package com.mycu.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -8,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.mycu.dbhandler.HibernateUtil;
+import com.mycu.model.Movie;
 import com.mycu.model.User;
 
 public class UserDAO 
@@ -16,11 +18,23 @@ public class UserDAO
 	private String email,fName,lName;
 	public long uID;
 	
-	SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-	Session session = sessionFactory.openSession();
+	SessionFactory sessionFactory;
+	Session session;
 	
 	public UserDAO()
 	{
+		sessionFactory = HibernateUtil.getSessionFactory();
+		session = sessionFactory.openSession();
+	}
+	
+	public void checkSession(){
+		
+		System.out.println("Session isopen? " + session.isOpen());
+		
+		//sessionFactory = HibernateUtil.getSessionFactory();
+		session = sessionFactory.openSession();
+		
+		System.out.println("Session isopen? " + session.isOpen());
 		
 	}
 
@@ -31,6 +45,7 @@ public class UserDAO
 	    	 session.beginTransaction();     	 
 	    	 Query query = session.createQuery("from User U where U.userName = :userName");
 	    	 query.setParameter("userName",user.getuserName());
+	    	 
 	         @SuppressWarnings("unchecked")
 			 List<User> user2 = query.list();
 	         for(User user3 : user2)
@@ -57,7 +72,13 @@ public class UserDAO
 	{
  		session.beginTransaction();
  		// this would save the Student_Info object into the database
- 		 session.save(user);	
+ 		 
+ 		System.out.println("New User uID: " + user.getuId());
+ 		
+ 		session.save(user);	
+ 		
+ 		System.out.println("Save succesful");
+ 		
  		 session.getTransaction().commit();
  		 
 		 
@@ -68,7 +89,10 @@ public class UserDAO
 	
 	public long save(User user)
 	{
- 		session.beginTransaction();		
+		
+		/*
+		session.beginTransaction();	
+		
  		lName=user.getlName();
  		fName=user.getfName();
  		email=user.getEmail();
@@ -78,7 +102,9 @@ public class UserDAO
  		
  		User user2=new User();
  		
+
  		user2= (User) session.get(User.class,uID+1);
+ 		
  		
  		user2.setfName(fName);
  		user2.setlName(lName);
@@ -92,6 +118,61 @@ public class UserDAO
  		
  		
  		return uID;
+		
+		*/
+		
+ 		session.beginTransaction();
+
+ 		lName=user.getlName();
+ 		fName=user.getfName();
+ 		email=user.getEmail();
+ 		Username=user.getuserName();
+ 		password=user.getpassword();
+ 		
+ 		System.out.println("SAVING uID: " + uID + " f: " + fName + " l: " + lName + " e: " + email);
+ 
+ 		String hql;
+ 		int result;
+ 		Query query;
+ 	 		
+ 		hql = "UPDATE User set fName = :fName WHERE uID = :uID";
+ 		query = session.createQuery(hql);
+		query.setString("fName",  fName );
+		query.setParameter("uID", uID);
+ 		result = query.executeUpdate();
+ 		System.out.println("Rows affected on userupdate table: " + result);
+ 		
+ 		hql = "UPDATE User set lName = :lName WHERE uID = :uID";
+ 		query = session.createQuery(hql);
+ 		query.setString("lName", lName );
+ 		query.setParameter("uID", uID);
+ 		result = query.executeUpdate();
+ 		System.out.println("Rows affected on userupdate table: " + result);
+ 		
+ 		hql = "UPDATE User set email = :email WHERE uID = :uID";
+ 		query = session.createQuery(hql);
+		query.setString("email",  email );
+ 		query.setParameter("uID", uID);
+ 		result = query.executeUpdate();
+ 		System.out.println("Rows affected on userupdate table: " + result);
+ 		
+ 		hql = "UPDATE User set username = :userName WHERE uID = :uID";
+ 		query = session.createQuery(hql);
+ 		query.setString("userName", Username );
+ 		query.setParameter("uID", uID);
+ 		result = query.executeUpdate();
+ 		System.out.println("Rows affected on userupdate table: " + result);
+ 		
+ 		hql = "UPDATE User set password = :password WHERE uID = :uID";
+ 		query = session.createQuery(hql);
+ 		query.setString("password", password );
+ 		query.setParameter("uID", uID);
+ 		result = query.executeUpdate();
+ 		System.out.println("Rows affected on userupdate table: " + result);
+ 		
+ 		return uID;
+ 		
+		
 	}
 	
 	public User getUser(long uID)

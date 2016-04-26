@@ -51,8 +51,8 @@
 <tr style="background-color:white;color: black;text-align: center;" height="30px" >  
 <td align="left"> ${movie.movieTitle}"</td>  
 <td><form:input  type="number"  path="allmovies[${status.index}].ratings"  min="0"  max="5"  value="${movie.ratings}" style="width: 35px;"/></td>  
-<td><form:input  path="allmovies[${status.index}].ignore"    value="${movie.ignore}" style="width: 50px;"/></td>  
-<td><form:input  path="allmovies[${status.index}].wish"      value="${movie.wish}" style="width: 50px;"/><br></td>
+<td><form:input  path="allmovies[${status.index}].ignore" value="${movie.ignore}" style="width: 50px;"/></td>  
+<td><form:input  path="allmovies[${status.index}].wish"   value="${movie.wish}"   style="width: 50px;"/><br></td>
 </tr>  
 </c:forEach>
 

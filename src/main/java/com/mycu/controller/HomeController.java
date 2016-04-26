@@ -31,7 +31,7 @@ import com.mycu.model.*;
 public class HomeController 
 {
 	
-	private String Username,Password;
+	private String userName,password;
 	private String email,fName,lName;
 	public  long uID,mID;
 	public String page;
@@ -53,7 +53,7 @@ public class HomeController
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
     public ModelAndView createAccount (@ModelAttribute("userForm") User user,ModelMap model)
     {
-    	 return new ModelAndView("createaccount", "user", new User(fName,lName,Username,email,Password));
+    	 return new ModelAndView("createaccount", "user", new User(fName,lName,userName,email,password));
     }
 	
 	
@@ -73,8 +73,9 @@ public class HomeController
 	// When user tries to log in
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
     public String submit(@ModelAttribute("userForm") User user,BindingResult result,ModelMap model) 
-    {
-		
+    {		
+		//userdao.checkSession();
+
     	uID=userdao.checkUser(user);
    
     	if(uID==0)
@@ -91,6 +92,7 @@ public class HomeController
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
     public String Recommendation(ModelMap model) 
     {
+		
 		usernew=userdao.getUser(uID);
     	page=displayRecommendation(model,uID);
     	
@@ -126,18 +128,75 @@ public class HomeController
 	
 	// When user clicks on edit profile
 	@RequestMapping(value = "/editprofile")
-    public ModelAndView  viewProfile(@ModelAttribute("userForm") User user,ModelMap model)
+    public ModelAndView  viewProfile(@ModelAttribute("userForm") User user, ModelMap model)
     {
-    	 return new ModelAndView("viewprofile", "user", new User(fName,lName,Username,email,Password));
+		
+		System.out.println("User: " + usernew.getfName() + " email: " + usernew.getEmail());
+    	return new ModelAndView("viewprofile", "user", usernew);
+    	
+    	//return new ModelAndView("viewprofile", "user", new User(fName,lName,userName,email,password));
+
     }
+	
+	 @RequestMapping(value = "/profile")
+	    public String profile(@ModelAttribute("userForm") User user, ModelMap model, @RequestParam String action)
+	    {
+	    
+		// System.out.println("Action: " + action.toString());
+		 
+	    	if(action.equals("Save"))  // Save changes to the database
+	    	{
+	    
+	    		if (usernew.compareTo(user) == 1)
+	    			System.out.println("No changes made");
+	    		else
+	    		{
+	
+	    			System.out.println("pre uID: " + uID + " pF: " + fName + " pF: " + lName + " pE: " + email + " pU: " + userName);
+	    			System.out.println("preUser uID: " + user.getuId() + " pF: " + user.getfName() + 
+	    					" pF: " + user.getlName() + " pE: " + user.getEmail() + " pU: " + user.getuserName());
+	    			System.out.println("preUsernew uID: " + usernew.getuId() + " pF: " + usernew.getfName() + 
+	    					" pF: " + usernew.getlName() + " pE: " + usernew.getEmail() + " pU: " + usernew.getuserName());
+	    			 
+	    			uID=userdao.save(user);
+	    			
+	    			System.out.println("post uID: " + uID + "pF: " + fName + "pF: " + lName + " pE: " + email + " pU: " + userName);System.out.println("post uID: " + uID);
+	    			System.out.println("postUser uID: " + user.getuId() + " pF: " + user.getfName() + 
+	    					" pF: " + user.getlName() + " pE: " + user.getEmail() + " pU: " + user.getuserName());
+	    			System.out.println("postUsernew uID: " + usernew.getuId() + " pF: " + usernew.getfName() + 
+	    					" pF: " + usernew.getlName() + " pE: " + usernew.getEmail() + " pU: " + usernew.getuserName());
+	    			
+	    			usernew=user;
+	    			user=userdao.getUser(uID);
+	    			
+	    			System.out.println("postUsernew uID: " + usernew.getuId() + " pF: " + usernew.getfName() + 
+	    					" pF: " + usernew.getlName() + " pE: " + usernew.getEmail() + " pU: " + usernew.getuserName());
+	    			
+	    		}
+	    		   		
+	    	}
+	    	
+	    	System.out.println("About to print users updated info");
+	    	System.out.println("Usernew fName: " + usernew.getfName());
+	
+	    	System.out.println("User fName: " + user.getfName());
+	    	System.out.println("User uID:" + user.getuId() + " User email: " + user.getEmail());
+	    	
+	    	page=displayRecommendation(model,uID);
+	    	return page;
+	    	
+	    	/*else // cancel changes
+	    	{
+	    		user=userdao.getUser(uID);
+	    		
+	    		model.addAttribute("fName",usernew.getfName());
+	    		return "userLoggedin";
+	    	}*/
+	    	
+	    
+	    }
     
 	
-
-	
-	
-
-	 
-	 
 	 @RequestMapping(value = "/MyLists-Ratings")
 	 public String myLists(ModelMap model)  //By default ratings page
 	 {		
@@ -216,14 +275,12 @@ public class HomeController
 		    		
 		    	}
 		    	
-		   
 		    	System.out.println("Title is "+ mdf.getMovieTitle());
 		    	System.out.println("Ignore value is "+ mdf.isIgnore());
 		    	System.out.println("Wish value is "+ mdf.isWish());
 		    	System.out.println("Ratings is "+ mdf.getRatings());
 		    }
 	    	
-		    
 		    page=displayRecommendation(model,uID);
 	    	return page;
 	    	
@@ -231,35 +288,8 @@ public class HomeController
 	 }
 	 
 		
-	    @RequestMapping(value = "/profile")
-	    public String profile(@ModelAttribute("userForm") User user,ModelMap model,@RequestParam String action)
-	    {
-	    	
-	    	
-	    	
-	    	if(action.equals("Save"))  // Save changes to the database
-	    	{
-	    		System.out.println("User name is "+user.getuserName());
-	    		uID=userdao.save(user);
-	    		user=userdao.getUser(uID);
-	    		usernew=user;
-	    		   		
-	    	}
-	    	page=displayRecommendation(model,uID);
-	    	return page;
-	    	
-	    	/*else // cancel changes
-	    	{
-	    		user=userdao.getUser(uID);
-	    		
-	    		model.addAttribute("fName",usernew.getfName());
-	    		return "userLoggedin";
-	    	}*/
-	    	
-	    
-	    }
+	   
 
-	    
 	        
 	    public String displayRecommendation(ModelMap model, long uID)
 	    {
@@ -326,6 +356,8 @@ public class HomeController
 		@RequestMapping(value = "/previousSearch", method = RequestMethod.GET)
 		 public String previousSearch(@ModelAttribute("userForm") SearchDAO search, ModelMap model) 
 		 {
+			//if(action.equals("previous")) //MPauly this is the code you were looking for.
+			
 			int startRow = searchdao.getStartRow();
 			
 			if (startRow==0)

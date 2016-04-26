@@ -90,8 +90,7 @@ public class SearchDAO implements StrategyDAO
 		
 		}
 		session.getTransaction().commit();	
-		session.close();
-		
+
 		return aList;
 	}
 	
@@ -156,8 +155,7 @@ public class SearchDAO implements StrategyDAO
 		}
 		
 		session.getTransaction().commit();	
-		session.close();
-		
+	
 		return aList;
 	}
 	

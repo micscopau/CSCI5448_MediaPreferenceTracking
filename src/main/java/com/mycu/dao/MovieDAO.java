@@ -24,14 +24,15 @@ public class MovieDAO
 	public String getMovie(long mID)
 	{
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	
 		Session session = sessionFactory.openSession();
- 		session.beginTransaction();
- 		
+		session.beginTransaction();
+		
  		movie=(Movie) session.get(Movie.class,mID);
  		movieTitle=movie.getMovieTitle();
  		
 		session.getTransaction().commit();
-		session.close();
+		//session.close();
 		
 		return movieTitle;
 	}
@@ -53,7 +54,7 @@ public class MovieDAO
 		}
 		
 		session.getTransaction().commit();
-		session.close();
+		//session.close();
 		
 		return mID;
 	}

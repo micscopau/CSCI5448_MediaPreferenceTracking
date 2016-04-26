@@ -2,18 +2,20 @@ package com.mycu.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 
 @Entity
 @Table(name="Userprofile")
-public class User 
+public class User implements Comparable<User>
 {
+	
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Id 
-	@GeneratedValue
 	private long    uId;
+	
 	public String fName,lName, userName;
 	private String email,password;
 	
@@ -79,6 +81,18 @@ public class User
 		super();
 	}
 	
+	
+	public int compareTo(User user){
+
+		
+		if ((this.fName.equals(user.getfName())) && (this.lName.equals(user.getlName())) 
+				&& (this.userName.equals(user.getuserName())) && (this.email.equals(user.getEmail()))
+				&& (this.password.equals(user.getpassword())))
+				return 1;
+		
+		return 0;
+		
+	}
 	
 
 }
